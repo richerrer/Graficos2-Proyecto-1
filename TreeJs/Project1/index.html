@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title> Project 1 Tree js</title>
+		<meta content="text/html" http-equiv="content-type" />
+		<script src="../source/three.js"></script>
+		<script src="js/curves.js"></script>
+		<script src="js/escena.js"></script>
+		<script>
+			
+			var render; 
+			var escena;
+			var canvasWidth = 1300;
+			var canvasHeight = 600;
+
+			function initScene(){
+				render = new THREE.WebGLRenderer();
+				render.setClearColor(0xFFFFFF, 1);
+				render.setSize(canvasWidth,canvasHeight);
+				document.getElementById("canvas").appendChild(render.domElement);
+
+				escena = new Escena(render,canvasWidth,canvasHeight);
+			    var puntos = [[0,0],[3,5],[5,2],[7,4]];
+				var pControl = [1/3,2/3];
+				var length = 1/100;
+			    result = CURVES.InterpolationCurve(puntos,pControl,length);
+				
+
+				                                         /*  Hermite Curves */
+				var puntos = [[0,0],[6,1],[-1,-1],[6,0]];
+				var length = 1/100;
+			    result = CURVES.HermiteCurve(puntos,length);
+			    
+			}
+
+			function crearCuadricula(sizeCuadricula,ancho,alto,positionX,positionY){
+
+				var material = new THREE.MeshBasicMaterial({color:0x000000,side:THREE.DoubleSide});
+
+				var cara1 = new THREE.Geometry();
+				cara1.vertices.push(new THREE.Vector3(0.0,  0.0, 0.0));
+				cara1.vertices.push(new THREE.Vector3( 1.0*sizeCuadricula,  0.0, 0.0));
+				cara1.vertices.push(new THREE.Vector3( 1.0*sizeCuadricula, 1.0*sizeCuadricula, 0.0));
+				cara1.vertices.push(new THREE.Vector3(0.0, 1.0*sizeCuadricula, 0.0));
+
+				cara1.faces.push(new THREE.Face3(0, 1, 2));
+				cara1.faces.push(new THREE.Face3(0, 3, 2));
+
+				cuadricula = new THREE.Mesh(cara1,material);
+				cuadricula.position.set(positionX,positionY,0);
+
+				var cara2 = new THREE.Geometry();
+				cara1.vertices.push(new THREE.Vector3(1.0*sizeCuadricula,  0.0, 0.0));
+				cara1.vertices.push(new THREE.Vector3( 1.0*sizeCuadricula,  0.0, -1.0*sizeCuadricula));
+				cara1.vertices.push(new THREE.Vector3( 1.0*sizeCuadricula, 1.0, -1.0*sizeCuadricula));
+				cara1.vertices.push(new THREE.Vector3(1.0*sizeCuadricula, 1.0*sizeCuadricula, 0.0*sizeCuadricula));
+
+				cara1.faces.push(new THREE.Face3(0, 1, 2));
+				cara1.faces.push(new THREE.Face3(0, 3, 2));
+
+				cuadricula = new THREE.Mesh(cara1,material);
+				cuadricula.position.set(positionX,positionY,0);
+				return cuadricula;
+			}
+			
+			function animarEscena(){
+
+				var length = result.length;
+				var tiempo = (Date.now() - lastTime)/1000;//Divido porque esta en miliseg y lo quiero en segundos
+				if(tiempo > 0){
+					escena.animarCamara(result);
+					escena.renderScene();
+				}
+				lastTime=Date.now();
+    			setTimeout(animarEscena,1000/60) //1.6 60 frames por segundo
+			}
+
+			function initWebGl()
+			{
+				initScene();
+				//renderScene();
+				lastTime = Date.now();
+				animarEscena();
+			}
+		</script>
+	</head>
+	<body onload="initWebGl()">
+		<div id="canvas"></div>
+	</body>
+</html>
