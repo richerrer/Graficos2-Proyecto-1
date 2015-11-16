@@ -6,8 +6,9 @@ function Escena( render , canvasWidth , canvasHeight ) {
 
 	this.camara = initCamara(canvasWidth/canvasHeight,this.escena);
 
-	this.cubo = initCubo();
-
+	//this.cubo = initCubo();
+	this.cubo = new Cubo(0,0,-7);
+	
 	this.lastTime = 0;
 
 	this.positionCameraAnimation = 0;
@@ -15,8 +16,19 @@ function Escena( render , canvasWidth , canvasHeight ) {
 	this.tipo = 0;
 
 	this.escena.add(this.camara);
-	this.escena.add(this.cubo);
+	
+	agregarCaja(this.escena,this.cubo);
+	//this.escena.add(this.cubo);
 
+}
+
+function agregarCaja(escena,cubo){
+	escena.add(cubo.getObject()[0]);
+	escena.add(cubo.getObject()[1]);
+	escena.add(cubo.getObject()[2]);
+	escena.add(cubo.getObject()[3]);
+	escena.add(cubo.getObject()[4]);
+	escena.add(cubo.getObject()[5]);
 }
 
 function initCamara(aspectRatio,object){
