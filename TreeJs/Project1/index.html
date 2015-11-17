@@ -21,17 +21,20 @@
 				document.getElementById("canvas").appendChild(render.domElement);
 
 				escena = new Escena(render,canvasWidth,canvasHeight);
-			    var puntos = [[0,0],[3,5],[5,2],[7,4]];
+			    /*var puntos = [[10,10],[5,5],[-5,-1],[-10,-5]];
 				var pControl = [1/3,2/3];
-				var length = 1/100;
-			    result = CURVES.InterpolationCurve(puntos,pControl,length);
+				var length = 1/300;
+			    result = CURVES.InterpolationCurve(puntos,pControl,length);*/
 				
 
-				                                         /*  Hermite Curves */
-				var puntos = [[0,0],[6,1],[-1,-1],[6,0]];
-				var length = 1/100;
-			    //result = CURVES.HermiteCurve(puntos,length);
-			    result = CURVES.BezierCurve(puntos,length);
+				                                        
+				var puntos = [[10,10],[5,5],[-5,-1],[-10,-5]];
+				var length = 1/300;
+			    result = CURVES.HermiteCurve(puntos,length);
+
+			    /*var puntos = [[10,10],[5,5],[-5,-1],[-10,-5]];
+			    var length = 1/300;
+			    result = CURVES.BezierCurve(puntos,length);*/
 			    
 			}
 

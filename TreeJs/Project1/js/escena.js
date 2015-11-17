@@ -8,7 +8,7 @@ function Escena( render , canvasWidth , canvasHeight ) {
 
 	this.cubo = initCubo();
 	//this.cubo = new Cubo(0,0,-7);
-	
+	this.camara.lookAt(this.cubo.position);
 	this.luzAmbiente = new THREE.AmbientLight(0XFFFFFF);
 
 	this.lastTime = 0;
@@ -39,7 +39,7 @@ function agregarCaja(escena,cubo){
 
 function initCamara(aspectRatio,object){
 	camara = new THREE.PerspectiveCamera(45,aspectRatio,0.1,100);
-	camara.position.set(0,0,10);
+	camara.position.set(10,0,10);
 	camara.lookAt(object.position);
 	return camara;
 }
@@ -61,12 +61,12 @@ function initCubo(){
 			new THREE.MeshBasicMaterial({color:0xFF00FF})
 		];
 		var cuboMaterial = new THREE.MeshFaceMaterial(cuboMateriales);
-		var cuboMaterial = new THREE.MeshLambertMaterial({color: 0x9999FF });
+		//var cuboMaterial = new THREE.MeshLambertMaterial({color: 0x9999FF });
 		
 		var cuboGeometria = new THREE.CubeGeometry(1.7, 1.7, 1.7);
 
 		cubo = new THREE.Mesh(cuboGeometria, cuboMaterial);
-		cubo.position.set(1.5, 0.0, -7.0);
+		cubo.position.set(0.0, 0.0, -7.0);
 		return cubo;
 }
 
@@ -77,7 +77,7 @@ function moverCamara(x,y,z){
 Escena.prototype.animarCamara = function(puntos){
 	var length = puntos.length;
 	moverCamara(puntos[this.positionCameraAnimation][0],0,puntos[this.positionCameraAnimation][1]);
-	//this.camara.lookAt(this.escena.position)
+	this.camara.lookAt(this.cubo.position)
 	if (this.positionCameraAnimation == length-1)
 		this.tipo = 1;
 	if (this.positionCameraAnimation == 0)

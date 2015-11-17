@@ -151,6 +151,24 @@ var CURVES = ( function(){
 				puntosX.push(puntos[i][0]);
 				puntosY.push(puntos[i][1]);
 			}
+
+			/*  Modofico el orden de los coeficientes para calculas las constantes */
+			var x2 = puntosX[1];
+			var x3 = puntosX[2];
+			var x4 = puntosX[3];
+
+			var y2 = puntosY[1];
+			var y3 = puntosY[2];
+			var y4 = puntosY[3];
+
+			puntosX[1] = x4;
+			puntosX[2] = x2;
+			puntosX[3] = x3;
+
+			puntosY[1] = y4;
+			puntosY[2] = y2;
+			puntosY[3] = y3;
+
 			matrix = InvMatrixHermite();
 			constantsX = constants(matrix,puntosX);
 			constantsY = constants(matrix,puntosY);
@@ -176,6 +194,24 @@ var CURVES = ( function(){
 				puntosX.push(puntos[i][0]);
 				puntosY.push(puntos[i][1]);
 			}
+
+			/*  Modofico el orden de los coeficientes para calculas las constantes */
+			var x2 = puntosX[1];
+			var x3 = puntosX[2];
+			var x4 = puntosX[3];
+
+			var y2 = puntosY[1];
+			var y3 = puntosY[2];
+			var y4 = puntosY[3];
+
+			puntosX[1] = x4;
+			puntosX[2] = x2;
+			puntosX[3] = x3;
+
+			puntosY[1] = y4;
+			puntosY[2] = y2;
+			puntosY[3] = y3;
+
 			matrix = InvMatrixBezier();
 			constantsX = constants(matrix,puntosX);
 			constantsY = constants(matrix,puntosY);
