@@ -30,39 +30,11 @@
 				                                         /*  Hermite Curves */
 				var puntos = [[0,0],[6,1],[-1,-1],[6,0]];
 				var length = 1/100;
-			    result = CURVES.HermiteCurve(puntos,length);
+			    //result = CURVES.HermiteCurve(puntos,length);
+			    result = CURVES.BezierCurve(puntos,length);
 			    
 			}
 
-			function crearCuadricula(sizeCuadricula,ancho,alto,positionX,positionY){
-
-				var material = new THREE.MeshBasicMaterial({color:0x000000,side:THREE.DoubleSide});
-
-				var cara1 = new THREE.Geometry();
-				cara1.vertices.push(new THREE.Vector3(0.0,  0.0, 0.0));
-				cara1.vertices.push(new THREE.Vector3( 1.0*sizeCuadricula,  0.0, 0.0));
-				cara1.vertices.push(new THREE.Vector3( 1.0*sizeCuadricula, 1.0*sizeCuadricula, 0.0));
-				cara1.vertices.push(new THREE.Vector3(0.0, 1.0*sizeCuadricula, 0.0));
-
-				cara1.faces.push(new THREE.Face3(0, 1, 2));
-				cara1.faces.push(new THREE.Face3(0, 3, 2));
-
-				cuadricula = new THREE.Mesh(cara1,material);
-				cuadricula.position.set(positionX,positionY,0);
-
-				var cara2 = new THREE.Geometry();
-				cara1.vertices.push(new THREE.Vector3(1.0*sizeCuadricula,  0.0, 0.0));
-				cara1.vertices.push(new THREE.Vector3( 1.0*sizeCuadricula,  0.0, -1.0*sizeCuadricula));
-				cara1.vertices.push(new THREE.Vector3( 1.0*sizeCuadricula, 1.0, -1.0*sizeCuadricula));
-				cara1.vertices.push(new THREE.Vector3(1.0*sizeCuadricula, 1.0*sizeCuadricula, 0.0*sizeCuadricula));
-
-				cara1.faces.push(new THREE.Face3(0, 1, 2));
-				cara1.faces.push(new THREE.Face3(0, 3, 2));
-
-				cuadricula = new THREE.Mesh(cara1,material);
-				cuadricula.position.set(positionX,positionY,0);
-				return cuadricula;
-			}
 			
 			function animarEscena(){
 

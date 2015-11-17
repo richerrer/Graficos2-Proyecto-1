@@ -15,8 +15,11 @@ function Cubo(positionX,positionY,positionZ){
 }
 
 function crearCara(positionX,positionY,positionZ,vertices){
-	var material = new THREE.MeshBasicMaterial({color:0x000000,side:THREE.DoubleSide});
+	var textura = new THREE.ImageUtils.loadTexture("img/madera.gif");
 
+	var material = new THREE.MeshLambertMaterial({color: 0XFFFF00,side:THREE.DoubleSide});
+	//var material = new THREE.MeshBasicMaterial({ map:textura, side:THREE.DoubleSide} );
+	
 	var cara = new THREE.Geometry();
 	cara.vertices.push(new THREE.Vector3(vertices[0][0],vertices[0][1],vertices[0][2]));
 	cara.vertices.push(new THREE.Vector3(vertices[1][0],vertices[1][1],vertices[1][2]));

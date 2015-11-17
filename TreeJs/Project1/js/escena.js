@@ -6,19 +6,25 @@ function Escena( render , canvasWidth , canvasHeight ) {
 
 	this.camara = initCamara(canvasWidth/canvasHeight,this.escena);
 
-	//this.cubo = initCubo();
-	this.cubo = new Cubo(0,0,-7);
+	this.cubo = initCubo();
+	//this.cubo = new Cubo(0,0,-7);
 	
+	this.luzAmbiente = new THREE.AmbientLight(0XFFFFFF);
+
 	this.lastTime = 0;
 
 	this.positionCameraAnimation = 0;
 
 	this.tipo = 0;
 
+	/*var luz1 = new THREE.PointLight(0xff0044);
+	luz1.position.set(-5,0,0);
+	this.escena.add(luz1);*/
 	this.escena.add(this.camara);
+	//agregarCaja(this.escena,this.cubo);
+	this.escena.add(this.luzAmbiente);
 	
-	agregarCaja(this.escena,this.cubo);
-	//this.escena.add(this.cubo);
+	this.escena.add(this.cubo);
 
 }
 
@@ -39,6 +45,13 @@ function initCamara(aspectRatio,object){
 }
 
 function initCubo(){
+	/*var cuboTextura = new THREE.TextureLoader("img/madera.gif");
+	var cuboMaterial = new THREE.MeshBasicMaterial({ map:cuboTextura, side:THREE.DoubleSide });
+	var cuboGeometria = new THREE.CubeGeometry(2.5, 2.5, 2.5);
+	var cubo = new THREE.Mesh(cuboGeometria, cuboMaterial);
+	return cubo;
+	*/
+
 	var cuboMateriales = [
 			new THREE.MeshBasicMaterial({color:0xFF0000}),
 			new THREE.MeshBasicMaterial({color:0x00FF00}),
@@ -48,7 +61,8 @@ function initCubo(){
 			new THREE.MeshBasicMaterial({color:0xFF00FF})
 		];
 		var cuboMaterial = new THREE.MeshFaceMaterial(cuboMateriales);
-
+		var cuboMaterial = new THREE.MeshLambertMaterial({color: 0x9999FF });
+		
 		var cuboGeometria = new THREE.CubeGeometry(1.7, 1.7, 1.7);
 
 		cubo = new THREE.Mesh(cuboGeometria, cuboMaterial);

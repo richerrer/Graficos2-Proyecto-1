@@ -61,6 +61,38 @@ var CURVES = ( function(){
 		return resultPoints;
 	}
 
+	/* No necesita de los puntos de control */
+	var InvMatrixBezier = function(){
+
+		var matrizInversa = new Array (4);
+
+		matrizInversa[0] = [ 1, 0 , 0 , 0 ];
+		matrizInversa[1] = [ 1 , 1/3, 0, 0 ];
+		matrizInversa[2] = [ 1 , 2/3, 1/3, 0];
+		matrizInversa[3] = [ 1 , 1, 1, 1 ];
+
+		return matrizInversa;
+	}
+
+	/*  Multiplica una matriz por un vector para hallar las constantes */
+	var constants = function(matrix , points){
+		if(matrix[0].length != points.length)
+			return 0;
+
+		var resultPoints = [];
+		var value = 0;
+		for (var i = 0 ; i < matrix.length; i++){
+			value = 0;
+			for (var j = 0 ; j < points.length; j++){
+				value = value + matrix[i][j] * points[j];
+			}
+			resultPoints.push(value.toFixed(2));
+		}
+
+		return resultPoints;
+	}
+
+
 	/* Evalua en la ecuacion para obtener el punto segun el parametro u y las constantes */
 	var getPoint = function(constants,u){
 		var u2 = Math.pow(u,2);
@@ -120,6 +152,31 @@ var CURVES = ( function(){
 				puntosY.push(puntos[i][1]);
 			}
 			matrix = InvMatrixHermite();
+			constantsX = constants(matrix,puntosX);
+			constantsY = constants(matrix,puntosY);
+			for(var u = 0;u<=1;u+=length){
+				x = getPoint(constantsX,u);
+				y = getPoint(constantsY,u);
+				point = [x,y]
+				result.push(point);
+			}
+
+			return result;
+		},
+
+		BezierCurve: function(puntos,length){
+			if (puntos.length != 4 && length > 1)
+				return 0;
+			var result = [];
+			var puntosX =[];
+			var puntosY = [];
+			var matrix,constantsX,constantsY;
+			var x,y,point;
+			for(var i = 0;i<puntos.length;i++){
+				puntosX.push(puntos[i][0]);
+				puntosY.push(puntos[i][1]);
+			}
+			matrix = InvMatrixBezier();
 			constantsX = constants(matrix,puntosX);
 			constantsY = constants(matrix,puntosY);
 			for(var u = 0;u<=1;u+=length){
