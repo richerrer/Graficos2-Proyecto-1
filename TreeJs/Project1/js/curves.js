@@ -67,9 +67,9 @@ var CURVES = ( function(){
 		var matrizInversa = new Array (4);
 
 		matrizInversa[0] = [ 1, 0 , 0 , 0 ];
-		matrizInversa[1] = [ 1 , 1/3, 0, 0 ];
-		matrizInversa[2] = [ 1 , 2/3, 1/3, 0];
-		matrizInversa[3] = [ 1 , 1, 1, 1 ];
+		matrizInversa[1] = [ -3 , 3, 0, 0 ];
+		matrizInversa[2] = [ 3 , -6 , 3, 0];
+		matrizInversa[3] = [ 1 , 3, -3, 1 ];
 
 		return matrizInversa;
 	}
