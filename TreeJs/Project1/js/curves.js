@@ -74,7 +74,7 @@ var CURVES = ( function(){
 		return resultPoints;
 	}
 	
-	/*  Modofico el orden de los puntos para calculas los coeficientes */
+	/*  Modofico el orden de los puntos para calculas los coeficientes solo para hermite curves*/
 	var realignPoints = function(puntos){
 		
 			var x2 = puntos[1];
@@ -102,7 +102,7 @@ var CURVES = ( function(){
 		return result.toFixed(2);
 	}
 
-	var getDegree3Curve = function(puntos,length,matrix){
+	var getDegree3Curve = function(puntos,length,matrix,type){
 		if (puntos.length != 4 && length > 1)
 				return 0;
 		var result = [];
@@ -116,10 +116,11 @@ var CURVES = ( function(){
 			puntosX.push(puntos[i][0]);
 			puntosY.push(puntos[i][1]);
 		}
-
-		/*  Modofico el orden de los coeficientes para calculas las constantes */
-		puntosX = realignPoints(puntosX);
-		puntosY = realignPoints(puntosY);
+		if(type == 0){
+			/*  Modifico el orden de los coeficientes para calculas las constantes solo para Hermite*/
+			puntosX = realignPoints(puntosX);
+			puntosY = realignPoints(puntosY);
+		}
 
 		coefficientsX = coefficients(matrix,puntosX);
 		coefficientsY = coefficients(matrix,puntosY);
@@ -168,12 +169,12 @@ var CURVES = ( function(){
 
 		HermiteCurve: function(puntos,length){
 			matrix = InvMatrixHermite();
-			return getDegree3Curve(puntos,length,matrix)
+			return getDegree3Curve(puntos,length,matrix,0)
 		},
 
 		BezierCurve: function(puntos,length){
 			matrix = InvMatrixBezier();
-			return getDegree3Curve(puntos,length,matrix)
+			return getDegree3Curve(puntos,length,matrix,1)
 		}
 	}
 
