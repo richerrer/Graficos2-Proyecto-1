@@ -43,24 +43,6 @@ var CURVES = ( function(){
 		return matrizInversa;
 	}
 
-	/*  Multiplica una matriz por un vector para hallar las constantes */
-	var constants = function(matrix , points){
-		if(matrix[0].length != points.length)
-			return 0;
-
-		var resultPoints = [];
-		var value = 0;
-		for (var i = 0 ; i < matrix.length; i++){
-			value = 0;
-			for (var j = 0 ; j < points.length; j++){
-				value = value + matrix[i][j] * points[j];
-			}
-			resultPoints.push(value.toFixed(2));
-		}
-
-		return resultPoints;
-	}
-
 	/* No necesita de los puntos de control */
 	var InvMatrixBezier = function(){
 
@@ -75,7 +57,7 @@ var CURVES = ( function(){
 	}
 
 	/*  Multiplica una matriz por un vector para hallar las constantes */
-	var constants = function(matrix , points){
+	var coefficients = function(matrix , points){
 		if(matrix[0].length != points.length)
 			return 0;
 
@@ -91,19 +73,64 @@ var CURVES = ( function(){
 
 		return resultPoints;
 	}
+	
+	/*  Modofico el orden de los puntos para calculas los coeficientes */
+	var realignPoints = function(puntos){
+		
+			var x2 = puntos[1];
+			var x3 = puntos[2];
+			var x4 = puntos[3];
 
+			puntos[1] = x4;
+			puntos[2] = x2;
+			puntos[3] = x3;
+
+			return puntos;
+
+	}
 
 	/* Evalua en la ecuacion para obtener el punto segun el parametro u y las constantes */
-	var getPoint = function(constants,u){
+	var getPoint = function(coefficients,u){
 		var u2 = Math.pow(u,2);
 		var u3 = Math.pow(u,3);
-		var c0 = parseFloat(constants[0]);
-		var c1 = parseFloat(constants[1]);
-		var c2 = parseFloat(constants[2]);
-		var c3 = parseFloat(constants[3]);
+		var c0 = parseFloat(coefficients[0]);
+		var c1 = parseFloat(coefficients[1]);
+		var c2 = parseFloat(coefficients[2]);
+		var c3 = parseFloat(coefficients[3]);
 
 		var result = c0 +(c1*u) + (c2*u2)+ (c3*u3);
 		return result.toFixed(2);
+	}
+
+	var getDegree3Curve = function(puntos,length,matrix){
+		if (puntos.length != 4 && length > 1)
+				return 0;
+		var result = [];
+		var puntosX =[];
+		var puntosY = [];
+		var coefficientsX,coefficientsY;
+		var x,y,point;
+
+		/* Obtengo los puntos x y en listas separadas */
+		for(var i = 0;i<puntos.length;i++){
+			puntosX.push(puntos[i][0]);
+			puntosY.push(puntos[i][1]);
+		}
+
+		/*  Modofico el orden de los coeficientes para calculas las constantes */
+		puntosX = realignPoints(puntosX);
+		puntosY = realignPoints(puntosY);
+
+		coefficientsX = coefficients(matrix,puntosX);
+		coefficientsY = coefficients(matrix,puntosY);
+		for(var u = 0;u<=1;u+=length){
+			x = getPoint(coefficientsX,u);
+			y = getPoint(coefficientsY,u);
+			point = [x,y]
+			result.push(point);
+		}
+
+		return result;
 	}
 
 	return{
@@ -120,18 +147,18 @@ var CURVES = ( function(){
 			var result = [];
 			var puntosX =[];
 			var puntosY = [];
-			var matrix,constantsX,constantsY;
+			var matrix,coefficientsX,coefficientsY;
 			var x,y,point;
 			for(var i = 0;i<puntos.length;i++){
 				puntosX.push(puntos[i][0]);
 				puntosY.push(puntos[i][1]);
 			}
 			matrix = InvMatrixInterpolation(pControl);
-			constantsX = constants(matrix,puntosX);
-			constantsY = constants(matrix,puntosY);
+			coefficientsX = coefficients(matrix,puntosX);
+			coefficientsY = coefficients(matrix,puntosY);
 			for(var u = 0;u<=1;u+=length){
-				x = getPoint(constantsX,u);
-				y = getPoint(constantsY,u);
+				x = getPoint(coefficientsX,u);
+				y = getPoint(coefficientsY,u);
 				point = [x,y]
 				result.push(point);
 			}
@@ -140,89 +167,13 @@ var CURVES = ( function(){
 		},
 
 		HermiteCurve: function(puntos,length){
-			if (puntos.length != 4 && length > 1)
-				return 0;
-			var result = [];
-			var puntosX =[];
-			var puntosY = [];
-			var matrix,constantsX,constantsY;
-			var x,y,point;
-			for(var i = 0;i<puntos.length;i++){
-				puntosX.push(puntos[i][0]);
-				puntosY.push(puntos[i][1]);
-			}
-
-			/*  Modofico el orden de los coeficientes para calculas las constantes */
-			var x2 = puntosX[1];
-			var x3 = puntosX[2];
-			var x4 = puntosX[3];
-
-			var y2 = puntosY[1];
-			var y3 = puntosY[2];
-			var y4 = puntosY[3];
-
-			puntosX[1] = x4;
-			puntosX[2] = x2;
-			puntosX[3] = x3;
-
-			puntosY[1] = y4;
-			puntosY[2] = y2;
-			puntosY[3] = y3;
-
 			matrix = InvMatrixHermite();
-			constantsX = constants(matrix,puntosX);
-			constantsY = constants(matrix,puntosY);
-			for(var u = 0;u<=1;u+=length){
-				x = getPoint(constantsX,u);
-				y = getPoint(constantsY,u);
-				point = [x,y]
-				result.push(point);
-			}
-
-			return result;
+			return getDegree3Curve(puntos,length,matrix)
 		},
 
 		BezierCurve: function(puntos,length){
-			if (puntos.length != 4 && length > 1)
-				return 0;
-			var result = [];
-			var puntosX =[];
-			var puntosY = [];
-			var matrix,constantsX,constantsY;
-			var x,y,point;
-			for(var i = 0;i<puntos.length;i++){
-				puntosX.push(puntos[i][0]);
-				puntosY.push(puntos[i][1]);
-			}
-
-			/*  Modofico el orden de los coeficientes para calculas las constantes */
-			var x2 = puntosX[1];
-			var x3 = puntosX[2];
-			var x4 = puntosX[3];
-
-			var y2 = puntosY[1];
-			var y3 = puntosY[2];
-			var y4 = puntosY[3];
-
-			puntosX[1] = x4;
-			puntosX[2] = x2;
-			puntosX[3] = x3;
-
-			puntosY[1] = y4;
-			puntosY[2] = y2;
-			puntosY[3] = y3;
-
 			matrix = InvMatrixBezier();
-			constantsX = constants(matrix,puntosX);
-			constantsY = constants(matrix,puntosY);
-			for(var u = 0;u<=1;u+=length){
-				x = getPoint(constantsX,u);
-				y = getPoint(constantsY,u);
-				point = [x,y]
-				result.push(point);
-			}
-
-			return result;
+			return getDegree3Curve(puntos,length,matrix)
 		}
 	}
 
