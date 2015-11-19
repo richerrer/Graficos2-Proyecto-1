@@ -2,95 +2,58 @@ cuartoPosition = [0,0,0];//Cuarto 2 unidades detras de la camara
 camaraPosition = [0,0,0];// Camara en el origen
 cuboPosition = [0,0,-12];
 cuartoSize = [10,7,30];
-cuboSize = [3,2,2];
+cuboSize = [1.5,1.5,1.5];
 
 function Escena( render , canvasWidth , canvasHeight ) {
-
+	this.lastTime = 0;
+	this.positionCameraAnimation = 0;
+	this.tipo = 0;	
+	
 	this.render = render;
 
 	this.escena = new THREE.Scene();
 
+	initLuces(this.escena);
+	
 	this.camara = initCamara(canvasWidth/canvasHeight,this.escena);
 
-	this.cubo = initCustomCube(cuboSize[0],cuboSize[1],cuboSize[2],cuboPosition[0],cuboPosition[1],cuboPosition[2],"img/madera.jpg",1);
-	//this.cubo = initCustomCube(cuboPosition[0],cuboPosition[1],cuboPosition[2]);
+	this.cuarto = initCuarto(cuartoSize[0],cuartoSize[1],cuartoSize[2],cuartoPosition[0],cuartoPosition[1],cuartoPosition[2],"img/cuarto.jpg",3,this.escena);
 
-	///////////////////////////// AGREGA LOS OBJETOS AL INTERIOR DEL COFRE ///////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////			
-	var cuboTextura2 = new THREE.ImageUtils.loadTexture("img/cubo.jpg");
-	var cuboMaterial2 = new THREE.MeshLambertMaterial({ map:cuboTextura2, side:THREE.DoubleSide });
-	var cuboGeometria2 = new THREE.CubeGeometry(0.6, 0.6, 0.6);
-	var cubo2 = new THREE.Mesh(cuboGeometria2, cuboMaterial2);
-	cubo2.position.set(1,0,0);
-	cubo2.castShadow = true;
-	cubo.add(cubo2);		
-	//////////////////////////////////////////////////////////////////////////////////////////////			
-	var esferaTextura = new THREE.ImageUtils.loadTexture("img/pelota.jpg");
-	var esferaMaterial = new THREE.MeshLambertMaterial({ map:esferaTextura, side:THREE.DoubleSide });
-	var esferaGeometria = new THREE.SphereGeometry(0.4, 16 ,16);
-	var esfera = new THREE.Mesh(esferaGeometria, esferaMaterial);
-	esfera.position.set(0,0,0);
-	esfera.castShadow = true;
-	cubo.add(esfera);
-	//////////////////////////////////////////////////////////////////////////////////////////////			
-	var piramideTextura = new THREE.ImageUtils.loadTexture("img/piramide.jpg");
-	var piramideMaterial = new THREE.MeshLambertMaterial({ map:piramideTextura, side:THREE.DoubleSide });
-	var piramideGeometria = new THREE.CylinderGeometry(0, 0.5 ,1, 4, 1, true);
-	var piramide = new THREE.Mesh(piramideGeometria, piramideMaterial);
-	piramide.position.set(-0.8,0,0);
-	piramide.castShadow = true;
-	cubo.add(piramide);
-	//////////////////////////////////////////////////////////////////////////////////////////////	
+	this.caja = new Caja(cuboSize[0],cuboSize[1],cuboSize[2],cuboPosition[0],cuboPosition[1],cuboPosition[2],"img/madera.jpg",this.cuarto);
 
-	cubo.castShadow = true;
-	cubo.receiveShadow = true;
+	initEsfera(this.caja.get());
 
-	//this.cuarto = initCubo(cuartoSize[0],cuartoSize[1],cuartoSize[2],cuartoPosition[0],cuartoPosition[1],cuartoPosition[2]);
-	this.cuarto = initCustomCube(cuartoSize[0],cuartoSize[1],cuartoSize[2],cuartoPosition[0],cuartoPosition[1],cuartoPosition[2],"img/cuarto.jpg",3);
-	//this.cubo = new Cubo(0,0,-7);
-	this.camara.lookAt(this.cubo.position);
+	initCubo(this.caja.get(),0,1,0);
 
-	this.luzAmbiente = new THREE.AmbientLight(0XFFFFFF);
-	this.escena.add(this.luzAmbiente);
+	initPiramide(this.caja.get());
 
-	this.lastTime = 0;
-
-	this.positionCameraAnimation = 0;
-
-	this.tipo = 0;	
-
-	var luz1 = new THREE.PointLight(0xff00ff);
-	luz1.position.set(-5,0,0);
-	this.escena.add(luz1);
-
-	
-	this.escena.add(this.camara);
-	//agregarCaja(this.escena,this.cubo);
-	
-	this.escena.add(this.cubo);
-
-	this.escena.add(this.cuarto);
-
+	//initLuces(this.cuarto);
 }
 
-function agregarCaja(escena,cubo){
-	escena.add(cubo.getObject()[0]);
-	escena.add(cubo.getObject()[1]);
-	escena.add(cubo.getObject()[2]);
-	escena.add(cubo.getObject()[3]);
-	escena.add(cubo.getObject()[4]);
-	escena.add(cubo.getObject()[5]);
+function initLuces(object){
+	var pos = [-1,-1,1];
+	var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+	directionalLight.position.set( pos[0],pos[1],pos[2]);
+	//object.add( directionalLight );
+	
+	pos = [1,0,1];
+	directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+	directionalLight.position.set( pos[0],pos[1],pos[2]);
+	//object.add( directionalLight );
+	
+	var luzAmbiente = new THREE.AmbientLight(0XFFFFFF);
+	object.add(luzAmbiente);
 }
 
 function initCamara(aspectRatio,object){
-	camara = new THREE.PerspectiveCamera(45,aspectRatio,0.1,100);
-	//camara.position.set(10,0,10);
+    camara = new THREE.PerspectiveCamera(45,aspectRatio,0.1,100);
 	camara.position.set(camaraPosition[0],camaraPosition[1],camaraPosition[2]);
 	camara.lookAt(object.position);
+	object.add(camara);
 	return camara;
 }
 
-function initCustomCube(sizeX,sizeY,sizeZ,posX,posY,posZ,imagen,nimagenes){	
+function initCuarto(sizeX,sizeY,sizeZ,posX,posY,posZ,imagen,nimagenes,object){	
 	
 	var cuboTextura = new THREE.ImageUtils.loadTexture(imagen);
 	var cuboMaterial = new THREE.MeshLambertMaterial({ map:cuboTextura, side:THREE.DoubleSide });
@@ -197,10 +160,43 @@ function initCustomCube(sizeX,sizeY,sizeZ,posX,posY,posZ,imagen,nimagenes){
 
 	cubo.doubleSided = true;
 
+	cubo.castShadow = true;
+	cubo.receiveShadow = true;
 
+	object.add(cubo);
 	return cubo;
 }
 
+function initEsfera(object){
+	var esferaTextura = new THREE.ImageUtils.loadTexture("img/pelota.jpg");
+	var esferaMaterial = new THREE.MeshLambertMaterial({ map:esferaTextura, side:THREE.DoubleSide });
+	var esferaGeometria = new THREE.SphereGeometry(0.4, 16 ,16);
+	var esfera = new THREE.Mesh(esferaGeometria, esferaMaterial);
+	esfera.position.set(0,0,-10);
+	esfera.castShadow = true;
+	object.add(esfera);
+	
+}
+
+function initCubo(object,x,y,z){
+	var cuboTextura2 = new THREE.ImageUtils.loadTexture("img/cubo.jpg");
+	var cuboMaterial2 = new THREE.MeshLambertMaterial({ map:cuboTextura2, side:THREE.DoubleSide });
+	var cuboGeometria2 = new THREE.CubeGeometry(0.6, 0.6, 0.6);
+	var cubo2 = new THREE.Mesh(cuboGeometria2, cuboMaterial2);
+	cubo2.position.set(x,y,z);
+	cubo2.castShadow = true;
+	object.add(cubo2);	
+}
+
+function initPiramide(object){
+	var piramideTextura = new THREE.ImageUtils.loadTexture("img/piramide.jpg");
+	var piramideMaterial = new THREE.MeshLambertMaterial({ map:piramideTextura, side:THREE.DoubleSide });
+	var piramideGeometria = new THREE.CylinderGeometry(0, 0.5 ,1, 4, 1, true);
+	var piramide = new THREE.Mesh(piramideGeometria, piramideMaterial);
+	piramide.position.set(-0.8,0,0);
+	piramide.castShadow = true;
+	object.add(piramide);
+}
 
 function moverCamara(x,y,z){
 	this.camara.position.set(x,y,z);
@@ -209,7 +205,8 @@ function moverCamara(x,y,z){
 Escena.prototype.animarCamara = function(puntos){
 	var length = puntos.length;
 	moverCamara(puntos[this.positionCameraAnimation][0],0,puntos[this.positionCameraAnimation][1]);
-	this.camara.lookAt(this.cubo.position)
+	this.camara.lookAt(this.caja.position)
+	//this.camara.lookAt(this.escena.position)
 	if (this.positionCameraAnimation == length-1)
 		this.tipo = 1;
 	if (this.positionCameraAnimation == 0)

@@ -6,7 +6,7 @@
 		<script src="../source/three.js"></script>
 		<script src="js/curves.js"></script>
 		<script src="js/escena.js"></script>
-		<script src="js/cubo.js"></script>
+		<script src="js/caja.js"></script>
 		<script>
 			
 			var render; 
@@ -42,7 +42,7 @@
 					escena.renderScene();
 				}
 				lastTime=Date.now();
-    			setTimeout(animarEscena,1000/60) //1.6 60 frames por segundo
+    			setTimeout(animarEscena,1000/80) //1.6 60 frames por segundo
 			}
 
 			function initWebGl()
