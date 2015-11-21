@@ -14,13 +14,26 @@
 			var canvasWidth = 1300;
 			var canvasHeight = 650;
 
+			////
+			var camera;
+			var raycaster;
+			var mouse;
+
+			var objects = [];
+
+			raycaster = new THREE.Raycaster();
+			mouse = new THREE.Vector2();
+
+			var close =  true;
+			////
+
 			function initScene(){
 				render = new THREE.WebGLRenderer();
 				render.setClearColor(0xFFFFFF, 1);
 				render.setSize(canvasWidth,canvasHeight);
 				document.getElementById("canvas").appendChild(render.domElement);
 
-				escena = new Escena(render,canvasWidth,canvasHeight);
+				escena = new Escena(render,canvasWidth,canvasHeight,objects);
 				
 				var puntos = [[0,0],[-7,-3],[0,-7],[5,-9]];
 				var pControl = [1/3,2/3];
@@ -29,7 +42,39 @@
 				//result = CURVES.InterpolationCurve(puntos,pControl,length);
 			    //result = CURVES.HermiteCurve(puntos,length);
 				result = CURVES.BezierCurve(puntos,length);
-			    
+
+				//Obtengo camara de la escena
+				camera = escena.getCamera();
+
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );			    
+			}
+
+			function onDocumentMouseDown( event ) {
+
+				event.preventDefault();
+
+				mouse.x = ( event.clientX / render.domElement.clientWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / render.domElement.clientHeight ) * 2 + 1;
+
+				raycaster.setFromCamera( mouse, camera );
+
+				var intersects = raycaster.intersectObjects( objects );
+
+				if ( intersects.length > 0 ) {
+					var tapa = intersects[ 0 ].object;
+
+					if(close){
+						tapa.rotation.x += - Math.PI / 2;
+						tapa.position.z += 3;
+						close = false;
+					}
+
+					else{
+						tapa.rotation.x +=  Math.PI / 2;
+						tapa.position.z -= 3;											
+						close = true;
+					}
+				}
 			}
 
 			

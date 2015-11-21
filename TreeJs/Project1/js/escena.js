@@ -4,7 +4,7 @@ cuboPosition = [0,0,-12];
 cuartoSize = [10,7,30];
 cuboSize = [1.5,1.5,1.5];
 
-function Escena( render , canvasWidth , canvasHeight ) {
+function Escena( render , canvasWidth , canvasHeight, objects ) {
 	this.lastTime = 0;
 	this.positionCameraAnimation = 0;
 	this.tipo = 0;	
@@ -19,11 +19,11 @@ function Escena( render , canvasWidth , canvasHeight ) {
 
 	this.cuarto = initCuarto(cuartoSize[0],cuartoSize[1],cuartoSize[2],cuartoPosition[0],cuartoPosition[1],cuartoPosition[2],"img/cuarto.jpg",3,this.escena);
 
-	this.caja = new Caja(cuboSize[0],cuboSize[1],cuboSize[2],cuboPosition[0],cuboPosition[1],cuboPosition[2],"img/madera.jpg",this.cuarto);
+	this.caja = new Caja(cuboSize[0],cuboSize[1],cuboSize[2],cuboPosition[0],cuboPosition[1],cuboPosition[2],"img/madera.jpg",this.cuarto, objects);
 
 	initEsfera(this.caja.get());
 
-	initCubo(this.caja.get(),0,1,0);
+	initCubo(this.caja.get(),-1,-1,1);
 
 	initPiramide(this.caja.get());
 
@@ -172,7 +172,7 @@ function initEsfera(object){
 	var esferaMaterial = new THREE.MeshLambertMaterial({ map:esferaTextura, side:THREE.DoubleSide });
 	var esferaGeometria = new THREE.SphereGeometry(0.4, 16 ,16);
 	var esfera = new THREE.Mesh(esferaGeometria, esferaMaterial);
-	esfera.position.set(0,0,-10);
+	esfera.position.set(-0.5,0,0);
 	esfera.castShadow = true;
 	object.add(esfera);
 	
@@ -193,7 +193,7 @@ function initPiramide(object){
 	var piramideMaterial = new THREE.MeshLambertMaterial({ map:piramideTextura, side:THREE.DoubleSide });
 	var piramideGeometria = new THREE.CylinderGeometry(0, 0.5 ,1, 4, 1, true);
 	var piramide = new THREE.Mesh(piramideGeometria, piramideMaterial);
-	piramide.position.set(-0.8,0,0);
+	piramide.position.set(0.9,0,0);
 	piramide.castShadow = true;
 	object.add(piramide);
 }
@@ -220,4 +220,8 @@ Escena.prototype.animarCamara = function(puntos){
 
 Escena.prototype.renderScene = function() {
   this.render.render(this.escena,this.camara);
+};
+
+Escena.prototype.getCamera = function() {
+  return this.camara;
 };

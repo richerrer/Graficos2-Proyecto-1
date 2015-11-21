@@ -5,7 +5,7 @@ var verticesCaraSuperior = [[1,1,1],[1,1,-1],[-1,1,-1],[-1,1,1]];
 var verticesCaraInferior = [[1,-1,1],[1,-1,-1],[-1,-1,-1],[-1,-1,1]];
 var verticesCaraTrasera = [[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1]];
 
-function Caja(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,imagen,object){
+function Caja(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,imagen,object, objects){
 	this.caraFrontal = crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,verticesCaraFrontal,imagen);
 	this.caraTrasera = crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,verticesCaraTrasera,imagen);
 	this.caraLateralIzquierda = crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,verticesCaraLateralIzquierda,imagen);
@@ -19,6 +19,8 @@ function Caja(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,imagen,object){
 	object.add(this.caraLateralDerecha);
 	object.add(this.caraSuperior);
 	object.add(this.caraInferior);
+
+	objects.push(this.caraFrontal);// Solo se añade la cara que sirve de tapa
 }
 
 function crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,vertices,imagen){
@@ -33,7 +35,7 @@ function crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,vertices,imag
 	cara.vertices.push(new THREE.Vector3(vertices[2][0]*sizeX,vertices[2][1]*sizeY,vertices[2][2]*sizeZ));
 	cara.vertices.push(new THREE.Vector3(vertices[3][0]*sizeX,vertices[3][1]*sizeY,vertices[3][2]*sizeZ));
 
-	cara.faces.push(new THREE.Face3(0, 1, 2));//TRiangulo inferior
+	cara.faces.push(new THREE.Face3(0, 1, 2));//Triangulo inferior
 	cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(1,0),new THREE.Vector2(1,1)]);//Mapeo de la textura al triangulo
 
 	cara.faces.push(new THREE.Face3(2, 3, 0));//Triangulo Superior
@@ -51,9 +53,9 @@ function crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,vertices,imag
 }
 
 Caja.prototype.get= function (){
-	return this.caraFrontal;
+	return this.caraInferior;
 }
 
 Caja.prototype.position = function (){
-	return this.caraFrontal.position;
+	return this.caraInferior.position;
 }
