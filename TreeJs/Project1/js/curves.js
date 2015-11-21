@@ -168,13 +168,27 @@ var CURVES = ( function(){
 		},
 
 		HermiteCurve: function(puntos,length){
-			matrix = InvMatrixHermite();
-			return getDegree3Curve(puntos,length,matrix,0)
+			var matrix = InvMatrixHermite();
+			var inicio = 0; var tamano = 4; var result = [];
+			while(tamano <= puntos.length){
+				var subPuntos = puntos.slice(inicio,tamano);
+				inicio = inicio+3;tamano = tamano+3;
+				result = result.concat(getDegree3Curve(subPuntos,length,matrix,0));
+			}
+
+			return result;
 		},
 
 		BezierCurve: function(puntos,length){
-			matrix = InvMatrixBezier();
-			return getDegree3Curve(puntos,length,matrix,1)
+			var matrix = InvMatrixBezier();
+			var inicio = 0; var tamano = 4;var result = [];
+			while(tamano <= puntos.length){
+				var subPuntos = puntos.slice(inicio,tamano);
+				inicio = inicio+3;tamano = tamano+3;
+				result = result.concat(getDegree3Curve(subPuntos,length,matrix,1));
+			}
+
+			return result;
 		}
 	}
 

@@ -1,7 +1,7 @@
 cuartoPosition = [0,0,0];//Cuarto 2 unidades detras de la camara
 camaraPosition = [0,0,0];// Camara en el origen
 cuboPosition = [0,0,-12];
-cuartoSize = [10,7,30];
+cuartoSize = [19,7,30];
 cuboSize = [1.5,1.5,1.5];
 
 function Escena( render , canvasWidth , canvasHeight, objects ) {
@@ -205,8 +205,8 @@ function moverCamara(x,y,z){
 Escena.prototype.animarCamara = function(puntos){
 	var length = puntos.length;
 	moverCamara(puntos[this.positionCameraAnimation][0],0,puntos[this.positionCameraAnimation][1]);
-	this.camara.lookAt(this.caja.position)
-	//this.camara.lookAt(this.escena.position)
+	this.camara.lookAt(this.caja.position())
+	//this.camara.lookAt(0,0,0);
 	if (this.positionCameraAnimation == length-1)
 		this.tipo = 1;
 	if (this.positionCameraAnimation == 0)

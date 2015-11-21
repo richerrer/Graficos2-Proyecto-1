@@ -57,5 +57,5 @@ Caja.prototype.get= function (){
 }
 
 Caja.prototype.position = function (){
-	return this.caraInferior.position;
+	return this.caraTrasera.position;
 }
