@@ -12,8 +12,17 @@ function Caja(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,imagen,object, obj
 	this.caraLateralDerecha = crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,verticesCaraLateralDerecha,imagen);
 	this.caraSuperior = crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,verticesCaraSuperior,imagen);
 	this.caraInferior = crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,verticesCaraInferior,imagen);
+	
+	
+	////
+	var ptoRotacionTapa = new THREE.Mesh(      // Punto de rotación de la tapa
+    new THREE.SphereGeometry(0,0,0),
+    new THREE.MeshNormalMaterial());
+	ptoRotacionTapa.position.set(positionX,positionY+1.5,positionZ+1.5);
+	ptoRotacionTapa.add(this.caraFrontal);// Agrego  la cara forntal como hijo del punto de rotación	
+	////
 
-	object.add(this.caraFrontal);
+	object.add(ptoRotacionTapa);
 	object.add(this.caraTrasera);
 	object.add(this.caraLateralIzquierda);
 	object.add(this.caraLateralDerecha);
@@ -21,6 +30,12 @@ function Caja(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,imagen,object, obj
 	object.add(this.caraInferior);
 
 	objects.push(this.caraFrontal);// Solo se añade la cara que sirve de tapa
+	
+	//Cambio la posición de la cara frontal para que se ajuste a la posición del pto de Rotación
+	this.caraFrontal.position.x=0;
+	this.caraFrontal.position.y=-1.5;
+	this.caraFrontal.position.z=-1.5;
+	
 }
 
 function crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,vertices,imagen){

@@ -25,6 +25,11 @@
 			mouse = new THREE.Vector2();
 
 			var close =  true;
+			var animarTapa = false;
+			var tapa;
+			var ptRotacion;			
+			var rotLimit;
+			var isrotating =  false;
 			////
 
 			function initScene(){
@@ -62,19 +67,23 @@
 				var intersects = raycaster.intersectObjects( objects );
 
 				if ( intersects.length > 0 ) {
-					var tapa = intersects[ 0 ].object;
-
-					if(close){
-						tapa.rotation.x += - Math.PI / 2;
-						tapa.position.z += 3;
-						close = false;
-					}
-
-					else{
-						tapa.rotation.x +=  Math.PI / 2;
-						tapa.position.z -= 3;											
-						close = true;
-					}
+					
+					if(!isrotating){
+						tapa = intersects[ 0 ].object;
+						
+						ptRotacion = tapa.parent;
+						console.info("tapa: ", tapa);
+						
+						animarTapa = true;
+						rotLimit = 0;
+						if(close){
+							close = false;
+						}					
+						else{
+							close = true;
+						}
+						isrotating = true;
+					}					
 				}
 			}
 
@@ -86,6 +95,24 @@
 				if(tiempo > 0){
 					escena.animarCamara(result);
 					escena.renderScene();
+					
+					if(animarTapa && !close){
+						if(rotLimit < Math.PI / 2){
+							ptRotacion.rotation.x -=0.03;
+						}
+						else{
+							isrotating = false;
+						}
+					}
+					else if(animarTapa && close){
+						if(rotLimit < Math.PI / 2){
+							ptRotacion.rotation.x +=0.03;							
+						}
+						else{
+							isrotating = false;
+						}
+					}
+					rotLimit = rotLimit + 0.03;
 				}
 				lastTime=Date.now();
     			setTimeout(animarEscena,1000/80) //1.6 60 frames por segundo
