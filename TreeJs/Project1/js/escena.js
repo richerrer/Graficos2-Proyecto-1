@@ -207,8 +207,13 @@ function moverCamara(x,y,z){
 Escena.prototype.animarCamara = function(puntos){
 	var length = puntos.length;
 	moverCamara(puntos[this.positionCameraAnimation][0],0,puntos[this.positionCameraAnimation][1]);
+
+	if(controlCamara.paralelo == true){
+	this.camara.lookAt(0,0,0);}else{
 	this.camara.lookAt(this.caja.position())
-	//this.camara.lookAt(0,0,0);
+	}
+	
+
 	if (this.positionCameraAnimation == length-1)
 		this.tipo = 1;
 	if (this.positionCameraAnimation == 0)

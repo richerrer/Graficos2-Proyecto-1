@@ -86,6 +86,7 @@
 				}
 				
 				camera = escena.getCamera();
+				escena.animarCamara(result);
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );			    
 			}
 			
@@ -158,11 +159,15 @@
 				
 					controlCamara.Bezier = true;
 					controlCamara.Hermite = false;
+					controlCamara.paralelo = true;
+					controlCamara.centrado = false;
 
 				var gui = new dat.GUI();
 
 				var CB1Controller = gui.add(controlCamara, 'Bezier').listen();
 				var CB2Controller = gui.add(controlCamara, 'Hermite').listen();
+				var CB3Controller = gui.add(controlCamara, 'paralelo').listen();
+				var CB4Controller = gui.add(controlCamara, 'centrado').listen();
 
 				CB1Controller.onChange(function(value){
 						if(controlCamara.Bezier == true){
@@ -183,6 +188,28 @@
 						}else{
 							controlCamara.Bezier = true;
 							controlCamara.Hermite = false;
+						}
+				renderScene();
+				});	
+
+				CB3Controller.onChange(function(value){
+						if(controlCamara.paralelo == true){
+							controlCamara.paralelo = false;
+							controlCamara.centrado = true;
+						}else{
+							controlCamara.paralelo = true;
+							controlCamara.centrado = false;
+						}
+				renderScene();
+				});	
+
+				CB4Controller.onChange(function(value){
+						if(controlCamara.paralelo == true){
+							controlCamara.paralelo = false;
+							controlCamara.centrado = true;
+						}else{
+							controlCamara.paralelo = true;
+							controlCamara.centrado = false;
 						}
 				renderScene();
 				});	
