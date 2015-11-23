@@ -34,14 +34,12 @@
 			var isrotating =  false;
 			var controlCamara=this;
 			////
-		
+
 			function initScene(){
 				render = new THREE.WebGLRenderer();
 				render.setClearColor(0xFFFFFF, 1);
 				render.setSize(canvasWidth,canvasHeight);
-				render.shadowMapDebug = true;
 				document.getElementById("canvas").appendChild(render.domElement);
-               
 
 				escena = new Escena(render,canvasWidth,canvasHeight,objects);
 				
@@ -86,6 +84,7 @@
 				}
 				
 				camera = escena.getCamera();
+
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );			    
 			}
 			
@@ -199,7 +198,7 @@
 	</head>
 	<body onload="initWebGl()">
 		<script type="text/javascript" src="js/dat.gui.min.js"></script>
-		<div id="canvas">Proyecto Parcial de Graficos por Computadora II:----- Maya Ricardo, Mira Raul, Monar Jose </br>Instruccion: Hacer click en la tapa frontal para abrirla y hacer nuevamente click en ella para cerrarla, controlar tipo de curva que sigue la camara con GUI derecho </div>
+		<div id="canvas"></div>
 	</body>
-</html>		
+</html>		S
 

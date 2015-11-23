@@ -27,24 +27,25 @@ function Escena( render , canvasWidth , canvasHeight, objects ) {
 
 	initPiramide(this.caja.get());
 
-	initLuces(this.cuarto);
-
-
+	//initLuces(this.cuarto);
 }
 
 
 
 
 function initLuces(object){
+	var pos = [-1,-1,1];
+	var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+	directionalLight.position.set( pos[0],pos[1],pos[2]);
+	//object.add( directionalLight );
 	
-	var luzAmbiente = new THREE.AmbientLight(0X111111);
+	pos = [1,0,1];
+	directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+	directionalLight.position.set( pos[0],pos[1],pos[2]);
+	//object.add( directionalLight );
+	
+	var luzAmbiente = new THREE.AmbientLight(0XFFFFFF);
 	object.add(luzAmbiente);
-
-	var spotLight = new THREE.SpotLight( 0xffffff );
-	spotLight.position.set( 0,0,2);
-	spotLight.castShadow = true;
-	object.add( spotLight );    
-
 }
 
 function initCamara(aspectRatio,object){
@@ -58,7 +59,7 @@ function initCamara(aspectRatio,object){
 function initCuarto(sizeX,sizeY,sizeZ,posX,posY,posZ,imagen,nimagenes,object){	
 	
 	var cuboTextura = new THREE.ImageUtils.loadTexture(imagen);
-	var cuboMaterial = new THREE.MeshLambertMaterial({ map:cuboTextura, side:THREE.DoubleSide, shading: THREE.SmoothShading });
+	var cuboMaterial = new THREE.MeshLambertMaterial({ map:cuboTextura, side:THREE.DoubleSide });
 	var x1=((0-sizeX)/2); var x2=((0+sizeX)/2); var y1=((0-sizeY)/2); var y2=((0+sizeY)/2); var z1=((0-sizeZ)/2); var z2=((0+sizeZ)/2); 
 	//var meshMaterial = new THREE.MeshLambertMaterial( { color: 0x4b3621 } );
 	//meshMaterial.side = THREE.DoubleSide;
@@ -104,20 +105,20 @@ function initCuarto(sizeX,sizeY,sizeZ,posX,posY,posZ,imagen,nimagenes,object){
 		cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(1,1),new THREE.Vector2(1,0)]);
 		cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(0,1),new THREE.Vector2(1,1)]);
 		//lado4
-		cara.faces.push( new THREE.Face3(1,2,6) );
-		cara.faces.push( new THREE.Face3(1,6,5) );
-		cara.faceVertexUvs[0].push([new THREE.Vector2(0,1),new THREE.Vector2(0,0.66),new THREE.Vector2(1,0.66)]); //triangulo arriba
-		cara.faceVertexUvs[0].push([new THREE.Vector2(0,1),new THREE.Vector2(1,0.66),new THREE.Vector2(1,1)]); //triangulo abajo
-		//lado51
+		cara.faces.push( new THREE.Face3(6,2,1) );
+		cara.faces.push( new THREE.Face3(5,6,1) );
+		cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(1,1),new THREE.Vector2(1,0)]);
+		cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(0,1),new THREE.Vector2(1,1)]);
+		//lado5
 		//cara.faces.push( new THREE.Face3(4,5,6) ); //DESCOMENTAR PARA TAPAR CARA FRONTAL
 		//cara.faces.push( new THREE.Face3(7,4,6) ); //DESCOMENTAR PARA TAPAR CARA FRONTAL
 		//cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(1,1),new THREE.Vector2(1,0)]);
 		//cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(0,1),new THREE.Vector2(1,1)]);
 		//lado6
-		cara.faces.push( new THREE.Face3(4,0,5) );
+		cara.faces.push( new THREE.Face3(0,4,5) );
 		cara.faces.push( new THREE.Face3(0,1,5) );
-		cara.faceVertexUvs[0].push([new THREE.Vector2(0,0.33),new THREE.Vector2(1,0.33),new THREE.Vector2(0,0.66)]); //triangulo arriba
-		cara.faceVertexUvs[0].push([new THREE.Vector2(1,0.33),new THREE.Vector2(1,0.66),new THREE.Vector2(0,0.66)]); //triangulo abajo
+		cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(1,1),new THREE.Vector2(1,0)]);
+		cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(0,1),new THREE.Vector2(1,1)]);
 	}
 	if(nimagenes==3){
 		//lado1	
@@ -136,19 +137,19 @@ function initCuarto(sizeX,sizeY,sizeZ,posX,posY,posZ,imagen,nimagenes,object){
 		cara.faceVertexUvs[0].push([new THREE.Vector2(1,0.66),new THREE.Vector2(0,1),new THREE.Vector2(0,0.66)]); //triangulo arriba
 		cara.faceVertexUvs[0].push([new THREE.Vector2(1,0.66),new THREE.Vector2(1,1),new THREE.Vector2(0,1)]); //triangulo abajo
 		//lado4
-		cara.faces.push( new THREE.Face3(1,2,6) );
-		cara.faces.push( new THREE.Face3(1,6,5) );
-		cara.faceVertexUvs[0].push([new THREE.Vector2(0,1),new THREE.Vector2(0,0.66),new THREE.Vector2(1,0.66)]); //triangulo arriba
-		cara.faceVertexUvs[0].push([new THREE.Vector2(0,1),new THREE.Vector2(1,0.66),new THREE.Vector2(1,1)]); //triangulo abajo
-		//lado51
+		cara.faces.push( new THREE.Face3(6,2,1) );
+		cara.faces.push( new THREE.Face3(5,6,1) );
+		cara.faceVertexUvs[0].push([new THREE.Vector2(1,0.66),new THREE.Vector2(0,0.66),new THREE.Vector2(0,1)]); //triangulo arriba
+		cara.faceVertexUvs[0].push([new THREE.Vector2(1,1),new THREE.Vector2(1,0.66),new THREE.Vector2(0,1)]); //triangulo abajo
+		//lado5
 		//cara.faces.push( new THREE.Face3(4,5,6) ); //DESCOMENTAR PARA TAPAR CARA FRONTAL
 		//cara.faces.push( new THREE.Face3(7,4,6) ); //DESCOMENTAR PARA TAPAR CARA FRONTAL
 		//cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(1,1),new THREE.Vector2(1,0)]);
 		//cara.faceVertexUvs[0].push([new THREE.Vector2(0,0),new THREE.Vector2(0,1),new THREE.Vector2(1,1)]);
 		//lado6
-		cara.faces.push( new THREE.Face3(4,0,5) );
+		cara.faces.push( new THREE.Face3(0,4,5) );
 		cara.faces.push( new THREE.Face3(0,1,5) );
-		cara.faceVertexUvs[0].push([new THREE.Vector2(0,0.33),new THREE.Vector2(1,0.33),new THREE.Vector2(0,0.66)]); //triangulo arriba
+		cara.faceVertexUvs[0].push([new THREE.Vector2(1,0.33),new THREE.Vector2(0,0.33),new THREE.Vector2(0,0.66)]); //triangulo arriba
 		cara.faceVertexUvs[0].push([new THREE.Vector2(1,0.33),new THREE.Vector2(1,0.66),new THREE.Vector2(0,0.66)]); //triangulo abajo
 	}	
 	
@@ -162,7 +163,7 @@ function initCuarto(sizeX,sizeY,sizeZ,posX,posY,posZ,imagen,nimagenes,object){
 
 	cubo.doubleSided = true;
 
-	//cubo.castShadow = true;
+	cubo.castShadow = true;
 	cubo.receiveShadow = true;
 
 	object.add(cubo);
@@ -171,7 +172,7 @@ function initCuarto(sizeX,sizeY,sizeZ,posX,posY,posZ,imagen,nimagenes,object){
 
 function initEsfera(object){
 	var esferaTextura = new THREE.ImageUtils.loadTexture("img/pelota.jpg");
-	var esferaMaterial = new THREE.MeshLambertMaterial({ map:esferaTextura, side:THREE.DoubleSide});
+	var esferaMaterial = new THREE.MeshLambertMaterial({ map:esferaTextura, side:THREE.DoubleSide });
 	var esferaGeometria = new THREE.SphereGeometry(0.4, 16 ,16);
 	var esfera = new THREE.Mesh(esferaGeometria, esferaMaterial);
 	esfera.position.set(-0.5,0,0);

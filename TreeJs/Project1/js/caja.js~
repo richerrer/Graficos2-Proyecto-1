@@ -62,6 +62,7 @@ function crearCara(sizeX,sizeY,sizeZ,positionX,positionY,positionZ,vertices,imag
 	cuadrado = new THREE.Mesh(cara,material);
 	cuadrado.position.set(positionX,positionY,positionZ);
 
+	cuadrado.castShadow = true;
 	cuadrado.receiveShadow = true;
 	return cuadrado;
 }
