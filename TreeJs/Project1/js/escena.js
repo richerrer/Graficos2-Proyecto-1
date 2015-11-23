@@ -30,6 +30,9 @@ function Escena( render , canvasWidth , canvasHeight, objects ) {
 	//initLuces(this.cuarto);
 }
 
+
+
+
 function initLuces(object){
 	var pos = [-1,-1,1];
 	var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
@@ -201,7 +204,7 @@ function initPiramide(object){
 function moverCamara(x,y,z){
 	this.camara.position.set(x,y,z);
 }
-
+    
 Escena.prototype.animarCamara = function(puntos){
 	var length = puntos.length;
 	moverCamara(puntos[this.positionCameraAnimation][0],0,puntos[this.positionCameraAnimation][1]);
